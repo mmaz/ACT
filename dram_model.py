@@ -6,6 +6,7 @@
 
 import json
 import sys
+from ACT_json import dram_hynix as dram_config
 
 class Fab_DRAM():
     def __init__(self,  config = "ddr4_10nm", fab_yield=0.875):
@@ -13,8 +14,8 @@ class Fab_DRAM():
         ###############################
         # Carbon per capacity
         ###############################
-        with open("dram/dram_hynix.json", 'r') as f:
-            dram_config = json.load(f)
+        # with open("dram/dram_hynix.json", 'r') as f:
+        #     dram_config = json.load(f)
 
         assert config in dram_config.keys() and "DRAM configuration not found"
 
