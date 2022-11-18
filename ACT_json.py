@@ -69,3 +69,13 @@ carbon_intensity = {
   "nuclear"    : 12,
   "wind"       : 11
 }
+materials_config = {
+  "28nm" : 500  ,
+  "20nm" : 500 ,
+  "14nm" : 500 ,
+  "10nm" : 500 ,
+  "8nm"  : 500 ,
+  "7nm"  : 500 ,
+  "5nm"  : 500 ,
+  "3nm"  : 500
+}

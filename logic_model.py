@@ -6,6 +6,9 @@
 
 import json
 import sys
+from ACT_json import epa_config, materials_config
+from ACT_json import gpa_95 as gpa_config
+from ACT_json import carbon_intensity as src_configs
 
 class Fab_Logic():
     def __init__(self, process_node=14,
@@ -19,72 +22,74 @@ class Fab_Logic():
         ###############################
         # Energy per unit area
         ###############################
-        with open("logic/epa.json", 'r') as f:
-            epa_config = json.load(f)
+        # with open("logic/epa.json", 'r') as f:
+        #     epa_config = json.load(f)
 
         ###############################
         # Raw materials per unit area
         ###############################
-        with open("logic/materials.json", 'r') as f:
-            materials_config = json.load(f)
+        # with open("logic/materials.json", 'r') as f:
+        #     materials_config = json.load(f)
 
         ###############################
         # Gasses per unit area
         ###############################
-        if gpa == "95":
-            with open("logic/gpa_95.json", 'r') as f:
-                gpa_config = json.load(f)
+        # if gpa == "95":
+        #     with open("logic/gpa_95.json", 'r') as f:
+        #         gpa_config = json.load(f)
 
-        elif gpa == "99":
-            with open("logic/gpa_99.json", 'r') as f:
-                gpa_config = json.load(f)
+        # elif gpa == "99":
+        #     with open("logic/gpa_99.json", 'r') as f:
+        #         gpa_config = json.load(f)
 
-        elif gpa == "97":
-            with open("logic/gpa_95.json", 'r') as f:
-                gpa_95_config = json.load(f)
-            with open("logic/gpa_99.json", 'r') as f:
-                gpa_99_config = json.load(f)
+        # elif gpa == "97":
+        #     with open("logic/gpa_95.json", 'r') as f:
+        #         gpa_95_config = json.load(f)
+        #     with open("logic/gpa_99.json", 'r') as f:
+        #         gpa_99_config = json.load(f)
 
-            gpa_config = {}
-            for c in gpa_95_config.keys():
-                gas = (gpa_95_config[c] + gpa_99_config[c]) / 2.
-                gpa_config[c] = gas
+        #     gpa_config = {}
+        #     for c in gpa_95_config.keys():
+        #         gas = (gpa_95_config[c] + gpa_99_config[c]) / 2.
+        #         gpa_config[c] = gas
 
-        else:
-            print("Error: Unsupported GPA value for FAB logic")
-            sys.exit()
+        # else:
+        #     print("Error: Unsupported GPA value for FAB logic")
+        #     sys.exit()
 
         ###############################
         # Carbon intensity of fab
         ###############################
-        if "loc" in carbon_intensity:
-            with open("carbon_intensity/location.json", 'r') as f:
-                loc_configs = json.load(f)
+        # if "loc" in carbon_intensity:
+        #     with open("carbon_intensity/location.json", 'r') as f:
+        #         loc_configs = json.load(f)
 
-                loc = carbon_intensity.replace("loc_", "")
+        #         loc = carbon_intensity.replace("loc_", "")
 
-                assert loc in loc_configs.keys()
+        #         assert loc in loc_configs.keys()
 
-                fab_ci = loc_configs[loc]
+        #         fab_ci = loc_configs[loc]
 
-        elif "src" in carbon_intensity:
-            with open("carbon_intensity/source.json", 'r') as f:
-                src_configs = json.load(f)
+        # elif "src" in carbon_intensity:
+        #     with open("carbon_intensity/source.json", 'r') as f:
+        #         src_configs = json.load(f)
 
-                src = carbon_intensity.replace("src_", "")
+        #         src = carbon_intensity.replace("src_", "")
 
-                assert src in src_configs.keys()
+        #         assert src in src_configs.keys()
 
-                fab_ci = src_configs[src]
+        #         fab_ci = src_configs[src]
 
-        else:
-            print("Error: Carbon intensity must either be loc | src dependent")
-            sys.exit()
+        # else:
+        #     print("Error: Carbon intensity must either be loc | src dependent")
+        #     sys.exit()
+        assert carbon_intensity in src_configs.keys(), f"Carbon intensity {carbon_intensity} not found"
+        fab_ci = src_configs[carbon_intensity]
 
         ###############################
         # Aggregating model
         ###############################
-        process_node = str(process_node) + "nm"
+        # process_node = str(process_node) + "nm"
         assert process_node in epa_config.keys()
         assert process_node in gpa_config.keys()
         assert process_node in materials_config.keys()
