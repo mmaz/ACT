@@ -4,6 +4,7 @@
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
 
+from ACT_json import hdd_config
 import json
 import sys
 
@@ -12,11 +13,11 @@ class Fab_HDD():
         ###############################
         # Carbon per capacity
         ###############################
-        with open("hdd/hdd_consumer.json", 'r') as f:
-            hdd_config = json.load(f)
+        # with open("hdd/hdd_consumer.json", 'r') as f:
+        #     hdd_config = json.load(f)
 
-        with open("hdd/hdd_enterprise.json", 'r') as f:
-            hdd_config.update(json.load(f))
+        # with open("hdd/hdd_enterprise.json", 'r') as f:
+        #     hdd_config.update(json.load(f))
 
         assert config in hdd_config.keys() and "HDD configuration not found"
 
