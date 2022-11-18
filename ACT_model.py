@@ -15,7 +15,15 @@ from logic_model import Fab_Logic
 
 def model(state):
     # TODO(mmaz) currently ducktyped :( BlockOption def not in scope
+    co2 = "kg CO2"
+    footprint = {"system": [], "component": [], co2: []}
+
     print(state["cpu_node"]["options"][0].act_desc)
-    return (
-        Fab_DRAM().get_cpg() + Fab_HDD().get_cpg()
-    )  # + Fab_SSD().get_cpg() + Fab_Logic().get_cpg()
+    # return (
+    #     Fab_DRAM().get_cpg() + Fab_HDD().get_cpg()
+    # )  # + Fab_SSD().get_cpg() + Fab_Logic().get_cpg()
+
+    footprint["system"].append("Traditional")
+    footprint["component"].append("DRAM")
+    footprint[co2].append(Fab_DRAM().get_cpg())
+    return footprint
