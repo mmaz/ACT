@@ -112,13 +112,19 @@ def model(state):
     CPU_co2 = (CPU_Logic.get_carbon() + CPU_packaging) * CPU_count / 1000.0
     if enabled(state, ["energy_source", "cpu_node", "cpu_count"]):
         footprint["system"].append("Traditional")
-        footprint["component"].append("CPU")
+        footprint["component"].append("ACT CPU")
         footprint[co2].append(CPU_co2)
 
     DRAM_count = act_param(state, "dram") # There are n x (32GB+4GB ECC DRAM modules)
     DRAM_co2 = (DRAM.get_carbon() + DRAM_packging) / 1000. * DRAM_count
     if enabled(state, ["dram"]):
         footprint["system"].append("Traditional")
-        footprint["component"].append("DRAM")
+        footprint["component"].append("ACT DRAM")
         footprint[co2].append(DRAM_co2)
+
+    # for now always add packaging
+    # TODO(mmaz) this should be parameterized via # of cpus/dram modules/ssds
+    footprint["system"].append("Traditional")
+    footprint["component"].append("ACT Packaging")
+    footprint[co2].append(total_packaging)
     return footprint
