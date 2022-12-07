@@ -12,7 +12,7 @@ from hdd_model  import Fab_HDD
 from ssd_model  import Fab_SSD
 from logic_model  import Fab_Logic
 
-debug = False
+debug = True
 
 ##############################
 # Original Dell 740 LCA
@@ -34,8 +34,10 @@ cpu_area = 6.98 #cm^2
 # Estimated process technology node to mimic fairphone LCA process node
 ##############################
 CPU_Logic = Fab_Logic(gpa  = "95",
-                      carbon_intensity = "src_coal",
-                      process_node = 28,
+                    #   carbon_intensity = "src_coal",
+                      carbon_intensity = "coal",
+                    #   process_node = 28,
+                      process_node = "28nm",
                       fab_yield=ic_yield)
 
 SSD_main           = Fab_SSD(config  = "nand_30nm", fab_yield = ic_yield)
@@ -110,3 +112,18 @@ print("ACT SSD main", SSD_main_co2, "kg CO2 vs. LCA 3373 kg CO2")
 print("ACT SSD secondary", SSD_secondary_co2, "kg CO2 vs. LCA 64.1 kg CO2")
 print("ACT DRAM", DRAM_co2, "kg CO2 vs. LCA 533 kg CO2")
 print("ACT CPU", CPU_co2, "kg CO2 vs. LCA 47 kg CO2")
+
+
+"""
+output
+ACT SSD main 1476.9942857142858 kg CO2
+ACT SSD secondary 62.75 kg CO2
+ACT DRAM 330.4285714285714 kg CO2
+ACT CPU 23.143405714285716 kg CO2
+ACT Packaging 7.05 kg CO2
+--------------------------------
+ACT SSD main 1476.9942857142858 kg CO2 vs. LCA 3373 kg CO2
+ACT SSD secondary 62.75 kg CO2 vs. LCA 64.1 kg CO2
+ACT DRAM 330.4285714285714 kg CO2 vs. LCA 533 kg CO2
+ACT CPU 23.143405714285716 kg CO2 vs. LCA 47 kg CO2
+"""

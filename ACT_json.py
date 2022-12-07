@@ -79,3 +79,25 @@ materials_config = {
   "5nm"  : 500 ,
   "3nm"  : 500
 }
+ssd_hynix = {
+  "nand_30nm":31,
+  "nand_20nm":15,
+  "nand_10nm":10,
+  "nand_tlc_1z":5.6,
+  "nand_tlc_v3":6.3
+}
+ssd_seagate = {
+  "seagate_nytro_3530": 6.21,
+  "seagate_nytro_1551": 3.948,
+  "seagate_nytro_3331": 16.916
+}
+ssd_western = {
+  "western_digital_2016": 24.4,
+  "western_digital_2017": 17.9,
+  "western_digital_2018": 12.5,
+  "western_digital_2019": 10.7
+}
+
+
+
+

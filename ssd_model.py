@@ -6,22 +6,27 @@
 
 import json
 import sys
+from ACT_json import ssd_hynix, ssd_seagate, ssd_western
 
 class Fab_SSD():
     def __init__(self, config="nand_10nm", fab_yield=0.875):
         ###############################
         # Carbon per capacity
         ###############################
-        with open("ssd/ssd_hynix.json", 'r') as f:
-            ssd_config = json.load(f)
+        ssd_config = {}
+        ssd_config.update(ssd_hynix)
+        ssd_config.update(ssd_seagate)
+        ssd_config.update(ssd_western)
+        # with open("ssd/ssd_hynix.json", 'r') as f:
+        #     ssd_config = json.load(f)
 
-        with open("ssd/ssd_seagate.json", 'r') as f:
-            ssd_config.update(json.load(f))
+        # with open("ssd/ssd_seagate.json", 'r') as f:
+        #     ssd_config.update(json.load(f))
 
-        with open("ssd/ssd_western.json", 'r') as f:
-            ssd_config.update(json.load(f))
+        # with open("ssd/ssd_western.json", 'r') as f:
+        #     ssd_config.update(json.load(f))
 
-        assert config in ssd_config.keys() and "SSD configuration not found"
+        assert config in ssd_config.keys(), "SSD configuration not found"
 
         self.fab_yield = fab_yield
 

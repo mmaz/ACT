@@ -52,8 +52,8 @@ def model(state):
         fab_yield=ic_yield,
     )
 
-    # SSD_main           = Fab_SSD(config  = "nand_30nm", fab_yield = ic_yield)
-    # SSD_secondary      = Fab_SSD(config  = "nand_30nm", fab_yield = ic_yield)
+    SSD_main           = Fab_SSD(config  = "nand_30nm", fab_yield = ic_yield)
+    SSD_secondary      = Fab_SSD(config  = "nand_30nm", fab_yield = ic_yield)
     DRAM_SSD_main = Fab_DRAM(config="ddr3_50nm", fab_yield=ic_yield)
     DRAM_SSD_secondary = Fab_DRAM(config="ddr3_50nm", fab_yield=ic_yield)
     DRAM = Fab_DRAM(config="ddr3_50nm", fab_yield=ic_yield)
@@ -65,10 +65,10 @@ def model(state):
     DRAM.set_capacity(dellr740_dram)
 
     DRAM_SSD_main.set_capacity(dellr740_ssd_dram)
-    # SSD_main.set_capacity(dellr740_large_ssd)
+    SSD_main.set_capacity(dellr740_large_ssd)
 
     DRAM_SSD_secondary.set_capacity(dellr740_ssd_dram)
-    # SSD_secondary.set_capacity(dellr740_ssd)
+    SSD_secondary.set_capacity(dellr740_ssd)
 
     ##################################
     # Computing the packaging footprint
@@ -90,24 +90,10 @@ def model(state):
     )
     total_packaging = total_packaging / 1000.0
 
-    """
     ##################################
     # Compute end-to-end carbon footprints
     ##################################
-    SSD_main_count = 8 # There are 8x3.84TB SSD's
-    SSD_main_co2 = (SSD_main.get_carbon() + \
-                    DRAM_SSD_main.get_carbon() + \
-                    SSD_main_packaging) / 1000.
-    SSD_main_co2 = SSD_main_co2 * SSD_main_count
 
-    SSD_secondary_count = 1 # There are 1x400GB SSD's
-    SSD_secondary_co2 = (SSD_secondary.get_carbon() + \
-                        DRAM_SSD_secondary.get_carbon() +  \
-                        SSD_secondary_packaging) / 1000.
-    SSD_secondary_co2 = SSD_secondary_co2 * SSD_secondary_count
-
-
-    """
     CPU_count = act_param(state, "cpu_count")
     CPU_co2 = (CPU_Logic.get_carbon() + CPU_packaging) * CPU_count / 1000.0
     if enabled(state, ["energy_source", "cpu_node", "cpu_count"]):
@@ -121,6 +107,26 @@ def model(state):
         footprint["system"].append("Traditional")
         footprint["component"].append("ACT DRAM")
         footprint[co2].append(DRAM_co2)
+
+    SSD_main_count = act_param(state, "ssd_main") # There are n x (3.84TB SSD's)
+    SSD_main_co2 = (SSD_main.get_carbon() + \
+                    DRAM_SSD_main.get_carbon() + \
+                    SSD_main_packaging) / 1000.
+    SSD_main_co2 = SSD_main_co2 * SSD_main_count
+    if enabled(state, ["ssd_main"]):
+        footprint["system"].append("Traditional")
+        footprint["component"].append("ACT Main SSD")
+        footprint[co2].append(SSD_main_co2)
+
+    SSD_secondary_count = act_param(state, "ssd_secondary") # There are n x 400GB SSD's
+    SSD_secondary_co2 = (SSD_secondary.get_carbon() + \
+                        DRAM_SSD_secondary.get_carbon() +  \
+                        SSD_secondary_packaging) / 1000.
+    SSD_secondary_co2 = SSD_secondary_co2 * SSD_secondary_count
+    if enabled(state, ["ssd_secondary"]):
+        footprint["system"].append("Traditional")
+        footprint["component"].append("ACT Secondary SSD")
+        footprint[co2].append(SSD_secondary_co2)
 
     # for now always add packaging
     # TODO(mmaz) this should be parameterized via # of cpus/dram modules/ssds
